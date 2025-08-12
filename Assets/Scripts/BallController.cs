@@ -1,73 +1,78 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(AudioSource))] // تضمین وجود کامپوننت‌ها
 public class BallController : MonoBehaviour
 {
-    [Header("Movement Settings")]
+    [Header("Settings")]
     public float jumpForce = 10f;
-    public float rotationSpeed = 15f;
+    public AudioClip kickSound; // صدا برای ضربه زدن به توپ
+    public AudioClip groundHitSound; // صدا برای برخورد توپ با زمین
 
-    [Header("Audio Settings")]
-    [SerializeField] private AudioClip jumpSound; // فیلد سریالایز شده
-    private Rigidbody2D rb;
-    private AudioSource audioSource;
-    private Camera mainCam;
+    private Rigidbody2D _rb;
+    private AudioSource _audioSource;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        audioSource = GetComponent<AudioSource>();
-        mainCam = Camera.main;
+        _rb = GetComponent<Rigidbody2D>();
+        _rb.gravityScale = 0f;
 
-        // اعتبارسنجی اولیه
-        if (audioSource == null)
+        // تنظیم AudioSource
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null)
         {
-            audioSource = gameObject.AddComponent<AudioSource>();
-            Debug.LogWarning("AudioSource was added automatically");
+            _audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+        if (!ScoreCounter.Instance._isGameActive &&
+           (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
         {
-            Vector2 touchPosition = mainCam.ScreenToWorldPoint(
-                Input.mousePosition
-            );
-            ApplyForceFromTouch(touchPosition);
+            if (!IsPointerOverUIElement())
+            {
+                ScoreCounter.Instance.StartGame();
+                _rb.gravityScale = 1f;
+                PlaySound(kickSound);
+            }
+        }
+    }
+    private bool IsPointerOverUIElement()
+    {
+        return EventSystem.current.currentSelectedGameObject != null;
+    }
+
+    public void ApplyForce(Vector2 touchPosition)
+    {
+        Vector2 forceDirection = ((Vector2)transform.position - touchPosition).normalized;
+
+        _rb.AddForce(forceDirection * jumpForce, ForceMode2D.Impulse);
+        PlaySound(kickSound);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            ScoreCounter.Instance.HandleGroundHit();
+            PlaySound(groundHitSound); // پخش صدا با هر برخورد به زمین
         }
     }
 
-    void ApplyForceFromTouch(Vector2 touchPos)
+    // متد کمکی برای پخش صدا
+    private void PlaySound(AudioClip clip)
     {
-        // محاسبه جهت
-        Vector2 direction = ((Vector2)transform.position - touchPos).normalized;
-
-        // اعمال نیرو
-        rb.velocity = direction * jumpForce;
-
-        // چرخش
-        float torque = (touchPos.x > transform.position.x) ? -rotationSpeed : rotationSpeed;
-        rb.AddTorque(torque);
-
-        // پخش صدا با بررسی null
-        PlayJumpSound();
+        if (clip != null && _audioSource != null)
+        {
+            _audioSource.PlayOneShot(clip);
+        }
     }
 
-    void PlayJumpSound()
+    public void ResetBall()
     {
-        if (jumpSound == null)
-        {
-            Debug.LogError("Jump sound clip is not assigned!");
-            return;
-        }
-
-        if (audioSource == null)
-        {
-            Debug.LogError("AudioSource component is missing!");
-            return;
-        }
-
-        audioSource.PlayOneShot(jumpSound);
+        _rb.velocity = Vector2.zero;
+        _rb.angularVelocity = 0f;
+        transform.position = ScoreCounter.Instance.startPosition.position;
+        _rb.gravityScale = 0f;
     }
 }
