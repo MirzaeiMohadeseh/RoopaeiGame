@@ -13,26 +13,26 @@ public class HamburgerMenu : MonoBehaviour
     public Button exitButton;
     public Button shopButton;
     public GameObject ShopCanvas;
+    public Button backBtn;
 
     [Header("Game References")]
     public BallController ballController;
     public ScoreCounter scoreCounter;
 
-    [Header("Animation Settings")]
-    public float animationDuration = 0.3f;
-    private Vector3 shopButtonFinalPos = new Vector3(-130, -50, 0);
 
     void Start()
     {
         menuPanel.SetActive(false);
         shopButton.gameObject.SetActive(false);
         ShopCanvas.SetActive(false);
+        MusicManager.Instance.PlayMainMusic();
 
         hamburgerButton.onClick.AddListener(ToggleMenu);
         continueButton.onClick.AddListener(ContinueGame);
         restartButton.onClick.AddListener(RestartGame);
         exitButton.onClick.AddListener(ExitGame);
         shopButton.onClick.AddListener(OpenShop);
+        backBtn.onClick.AddListener(CloseShop);
     }
 
     void Update()
@@ -48,57 +48,28 @@ public class HamburgerMenu : MonoBehaviour
                 ToggleMenu();
             }
         }
+
     }
 
     void ToggleMenu()
     {
         bool willShow = !menuPanel.activeSelf;
+        menuPanel.SetActive(willShow);
+        shopButton.gameObject.SetActive(willShow);
+        Time.timeScale = willShow ? 0f : 1f;
 
         if (willShow)
-        {
-            menuPanel.SetActive(true);
-            shopButton.gameObject.SetActive(true);
-
-            StartCoroutine(AnimateShopButton(willShow));
-        }
+            MusicManager.Instance.PauseMusic(); 
         else
-        {
-            StartCoroutine(AnimateShopButton(willShow, () => {
-                menuPanel.SetActive(false);
-                shopButton.gameObject.SetActive(false);
-            }));
-        }
-
-        Time.timeScale = willShow ? 0f : 1f;
+            MusicManager.Instance.PlayMainMusic();
     }
 
-    IEnumerator AnimateShopButton(bool show, System.Action onComplete = null)
-    {
-        RectTransform shopRect = shopButton.GetComponent<RectTransform>();
-        Vector3 startPos = hamburgerButton.transform.position;
-        Vector3 endPos = show ? shopButtonFinalPos : startPos;
-
-        float elapsed = 0f;
-
-        while (elapsed < animationDuration)
-        {
-            shopRect.anchoredPosition = Vector3.Lerp(
-                show ? startPos : shopButtonFinalPos,
-                endPos,
-                elapsed / animationDuration);
-
-            elapsed += Time.unscaledDeltaTime;
-            yield return null;
-        }
-
-        shopRect.anchoredPosition = endPos;
-        onComplete?.Invoke();
-    }
     void ContinueGame()
     {
         menuPanel.SetActive(false);
         shopButton.gameObject.SetActive(false);
         Time.timeScale = 1f;
+        MusicManager.Instance.PlayMainMusic();
     }
 
     void RestartGame()
@@ -115,6 +86,7 @@ public class HamburgerMenu : MonoBehaviour
 
         // ۴. بازنشانی زمان بازی
         Time.timeScale = 1f;
+        MusicManager.Instance.PlayMainMusic();
 
         Debug.Log("بازی با موفقیت ریست شد");
     }
@@ -129,9 +101,20 @@ public class HamburgerMenu : MonoBehaviour
     }
     public void OpenShop()
     {
-        ShopCanvas.SetActive(true); 
+        ShopCanvas.SetActive(true);
         menuPanel.SetActive(false);
         shopButton.gameObject.SetActive(false);
         Time.timeScale = 0f;
+        MusicManager.Instance.PlayShopMusic();
+
     }
+
+    public void CloseShop()
+    {
+        ShopCanvas.SetActive(false);
+        Time.timeScale = 1f;
+        MusicManager.Instance.PlayMainMusic();
+
+    }
+
 }
