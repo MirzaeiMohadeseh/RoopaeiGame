@@ -8,7 +8,6 @@ public class PlayerHandController : MonoBehaviour
         if (!ScoreCounter.Instance._isGameActive) 
             return;
 
-        // بررسی آیا کلیک روی UI بوده یا نه
         if (IsPointerOverUIElement())
             return;
 
@@ -21,13 +20,11 @@ public class PlayerHandController : MonoBehaviour
         }
     }
 
-    // بررسی آیا اشاره‌گر روی عنصر UI است
     private bool IsPointerOverUIElement()
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return true;
         
-        // برای تاچ‌های موبایل
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);

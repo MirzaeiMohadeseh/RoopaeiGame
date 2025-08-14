@@ -54,8 +54,10 @@ public class ScoreCounter : MonoBehaviour
         ResetGame();
     }
 
-    void ResetGame()
+    public void ResetGame()
     {
+        _score = 0;
+        _isGameActive = false;
         ball.ResetBall();
         scoreText.text = "...ﺪﯿﻧﺰﺑ ﻪﺑﺮﺿ ﻉﻭﺮﺷ ﯼﺍﺮﺑ";
     }

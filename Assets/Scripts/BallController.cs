@@ -5,8 +5,8 @@ public class BallController : MonoBehaviour
 {
     [Header("Settings")]
     public float jumpForce = 10f;
-    public AudioClip kickSound; // صدا برای ضربه زدن به توپ
-    public AudioClip groundHitSound; // صدا برای برخورد توپ با زمین
+    public AudioClip kickSound;
+    public AudioClip groundHitSound; 
 
     private Rigidbody2D _rb;
     private AudioSource _audioSource;
@@ -16,7 +16,6 @@ public class BallController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = 0f;
 
-        // تنظیم AudioSource
         _audioSource = GetComponent<AudioSource>();
         if (_audioSource == null)
         {
@@ -55,11 +54,10 @@ public class BallController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             ScoreCounter.Instance.HandleGroundHit();
-            PlaySound(groundHitSound); // پخش صدا با هر برخورد به زمین
+            PlaySound(groundHitSound); 
         }
     }
 
-    // متد کمکی برای پخش صدا
     private void PlaySound(AudioClip clip)
     {
         if (clip != null && _audioSource != null)
@@ -74,5 +72,17 @@ public class BallController : MonoBehaviour
         _rb.angularVelocity = 0f;
         transform.position = ScoreCounter.Instance.startPosition.position;
         _rb.gravityScale = 0f;
+    }
+    public void ApplyPurchasedItems()
+    {
+        if (PlayerPrefs.GetInt("GoldenBall_Unlocked", 0) == 1)
+        {
+            // اعمال اثر توپ طلایی
+        }
+
+        if (PlayerPrefs.GetInt("ZeroGravity_Unlocked", 0) == 1)
+        {
+            Physics2D.gravity = Vector2.zero;
+        }
     }
 }
