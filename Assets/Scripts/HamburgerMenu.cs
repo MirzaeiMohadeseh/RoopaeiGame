@@ -37,17 +37,6 @@ public class HamburgerMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            Vector2 touchPos = Input.GetTouch(0).position;
-            if (RectTransformUtility.RectangleContainsScreenPoint(
-                hamburgerButton.GetComponent<RectTransform>(),
-                touchPos,
-                null))
-            {
-                ToggleMenu();
-            }
-        }
 
     }
 
