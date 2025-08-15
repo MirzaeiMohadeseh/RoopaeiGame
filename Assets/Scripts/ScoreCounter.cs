@@ -10,6 +10,11 @@ public class ScoreCounter : MonoBehaviour
     public TMP_Text scoreText;
     public Transform startPosition;
 
+    [Header("Lives")]
+    public int maxLives = 3;
+    private int currentLives;
+    public GameObject[] lifeIcons; // آیکون‌های قلب در UI
+
     private int _score = 0;
     public bool _isGameActive = false;
 
@@ -34,9 +39,12 @@ public class ScoreCounter : MonoBehaviour
     {
         _isGameActive = true;
         _score = 0;
+        currentLives = maxLives;
         UpdateScore();
+        UpdateLivesUI();
         ball.ResetBall();
     }
+
 
     public void RegisterTouch()
     {
@@ -44,23 +52,50 @@ public class ScoreCounter : MonoBehaviour
 
         _score++;
         UpdateScore();
+
+        EnvironmentManager.Instance.UpdateEnvironment(_score);
     }
+
 
     public void HandleGroundHit()
     {
         if (!_isGameActive) return;
 
-        _isGameActive = false;
-        ResetGame();
+        currentLives--;
+
+        UpdateLivesUI();
+
+        if (currentLives <= 0)
+        {
+            _isGameActive = false;
+            ResetGame();
+        }
+        else
+        {
+            ball.ResetBall(); // ادامه بازی با جان کمتر
+        }
     }
+
 
     public void ResetGame()
     {
         _score = 0;
         _isGameActive = false;
+        currentLives = maxLives;
         ball.ResetBall();
         scoreText.text = "...ﺪﯿﻧﺰﺑ ﻪﺑﺮﺿ ﻉﻭﺮﺷ ﯼﺍﺮﺑ";
+        UpdateLivesUI();
+        EnvironmentManager.Instance.ResetEnvironment();
     }
+    void UpdateLivesUI()
+    {
+        for (int i = 0; i < lifeIcons.Length; i++)
+        {
+            lifeIcons[i].SetActive(i < currentLives);
+        }
+    }
+
+
 
     void UpdateScore()
     {
