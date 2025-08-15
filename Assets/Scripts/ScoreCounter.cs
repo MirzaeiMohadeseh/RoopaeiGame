@@ -8,6 +8,7 @@ public class ScoreCounter : MonoBehaviour
     [Header("References")]
     public BallController ball;
     public TMP_Text scoreText;
+    private int _highScore = 0;
     public Transform startPosition;
 
     [Header("Lives")]
@@ -29,9 +30,9 @@ public class ScoreCounter : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     void Start()
     {
+        _highScore = PlayerPrefs.GetInt("HighScore", 0);
         ResetGame();
     }
 
@@ -53,8 +54,15 @@ public class ScoreCounter : MonoBehaviour
         _score++;
         UpdateScore();
 
+        if (_score > _highScore)
+        {
+            _highScore = _score;
+            PlayerPrefs.SetInt("HighScore", _highScore);
+        }
+
         EnvironmentManager.Instance.UpdateEnvironment(_score);
     }
+
 
 
     public void HandleGroundHit()
@@ -99,6 +107,7 @@ public class ScoreCounter : MonoBehaviour
 
     void UpdateScore()
     {
-        scoreText.text = $"{_score} :ﺯﺎﯿﺘﻣﺍ ";
+        scoreText.text = $" {_score} :ﺯﺎﯿﺘﻣﺍ\n {_highScore} :ﺩﺭﻮﮐﺭ";
     }
+
 }
