@@ -208,7 +208,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1861276963}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.000000076198695, y: 0}
+  m_AnchorMin: {x: 0.00000003809935, y: 0}
   m_AnchorMax: {x: 0.7425176, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -2223,10 +2223,11 @@ GameObject:
   m_Component:
   - component: {fileID: 638419185}
   - component: {fileID: 638419188}
+  - component: {fileID: 638419189}
   - component: {fileID: 638419187}
   - component: {fileID: 638419186}
   m_Layer: 5
-  m_Name: item1
+  m_Name: GoldenBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2336,6 +2337,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638419184}
   m_CullTransparentMesh: 1
+--- !u!114 &638419189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638419184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265c7dd77705e714fae297cb54377d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: 
+  purchaseButton: {fileID: 0}
+  purchaseManager: {fileID: 0}
 --- !u!1 &645128457
 GameObject:
   m_ObjectHideFlags: 0
@@ -3020,7 +3036,7 @@ GameObject:
   - component: {fileID: 831567824}
   - component: {fileID: 831567823}
   m_Layer: 5
-  m_Name: item1 (3)
+  m_Name: SpeedBooster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3935,8 +3951,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 99802250}
   m_HandleRect: {fileID: 99802249}
   m_Direction: 0
-  m_Value: 0.00000029593758
-  m_Size: 0.74251765
+  m_Value: 0.00000014796875
+  m_Size: 0.7425176
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4745,10 +4761,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1699501276}
   - component: {fileID: 1699501279}
+  - component: {fileID: 1699501280}
   - component: {fileID: 1699501278}
   - component: {fileID: 1699501277}
   m_Layer: 5
-  m_Name: item1 (1)
+  m_Name: InfinitStatus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4858,6 +4875,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699501275}
   m_CullTransparentMesh: 1
+--- !u!114 &1699501280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699501275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265c7dd77705e714fae297cb54377d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: 
+  purchaseButton: {fileID: 0}
+  purchaseManager: {fileID: 0}
 --- !u!1 &1762466298
 GameObject:
   m_ObjectHideFlags: 0
@@ -5778,10 +5810,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1901483330}
   - component: {fileID: 1901483333}
+  - component: {fileID: 1901483334}
   - component: {fileID: 1901483332}
+  - component: {fileID: 1901483335}
   - component: {fileID: 1901483331}
   m_Layer: 5
-  m_Name: item1 (2)
+  m_Name: HeartLive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5891,6 +5925,34 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1901483329}
   m_CullTransparentMesh: 1
+--- !u!114 &1901483334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901483329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd83707984a7b13498fe3a501b092ae1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  appkey: MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwDAh1Vi+4DHhex7TTNJF+i5jXQAdNeIws3h+JWPIo44D1YogKKLtwfqbH+xB7nS4IiDaNfbTvrtuOR7GBgzWol8wkTqXYFbqwkWQ1imaOzEKF9g76g/LFSGcOrHUQUb7jujRYkBbHOa99Xg4QEYX002WMzdUI1G/aqkz5yPA8KflMFuflHPot1HuY+3fmVX6tUtfSS5VlU5BovOvV8L8k2bmSxRZSFCCzT59B+bAT0CAwEAAQ==
+--- !u!114 &1901483335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901483329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eb34599e9f89fe4286e2b6276de588d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productId: heart_1
+  messageText: {fileID: 0}
+  messageDisplayTime: 3
 --- !u!1 &1913471938
 GameObject:
   m_ObjectHideFlags: 0
@@ -5979,6 +6041,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1933488974}
+  - component: {fileID: 1933488975}
   - component: {fileID: 1933488973}
   - component: {fileID: 1933488972}
   - component: {fileID: 1933488971}
@@ -6074,6 +6137,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1933488975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933488970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8aaf0df1b7767d4ab9be3fe4351eba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLives: 3
+  respawnDelay: 2
+  lifeIcons:
+  - {fileID: 654977017}
+  - {fileID: 785689985}
+  - {fileID: 1814162259}
+  gameOverPanel: {fileID: 0}
 --- !u!1 &1969640741
 GameObject:
   m_ObjectHideFlags: 0

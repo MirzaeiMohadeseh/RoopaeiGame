@@ -36,10 +36,25 @@ public class PlayerLives : MonoBehaviour
     {
         ResetGame();
     }
+    public void AddExtraLife()
+    {
+        if (currentLives < maxLives)
+        {
+            currentLives++;
+            UpdateLifeUI();
+        }
+    }
+
 
     public void LoseLife()
     {
         if (isRespawning) return;
+
+        if (GameStatus.Instance != null && GameStatus.Instance.IsInfiniteModeActive())
+        {
+            StartCoroutine(RespawnBall());
+            return;
+        }
 
         currentLives--;
         UpdateLifeUI();
@@ -53,6 +68,7 @@ public class PlayerLives : MonoBehaviour
             StartCoroutine(RespawnBall());
         }
     }
+
 
     IEnumerator RespawnBall()
     {

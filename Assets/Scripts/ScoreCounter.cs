@@ -10,6 +10,8 @@ public class ScoreCounter : MonoBehaviour
     public TMP_Text scoreText;
     private int _highScore = 0;
     public Transform startPosition;
+    private bool doubleScore = false;
+
 
     [Header("Lives")]
     public int maxLives = 3;
@@ -51,7 +53,8 @@ public class ScoreCounter : MonoBehaviour
     {
         if (!_isGameActive) return;
 
-        _score++;
+        _score += doubleScore ? 2 : 1;
+
         UpdateScore();
 
         if (_score > _highScore)
@@ -63,6 +66,10 @@ public class ScoreCounter : MonoBehaviour
         EnvironmentManager.Instance.UpdateEnvironment(_score);
     }
 
+    public void SetDoubleScore(bool state)
+    {
+        doubleScore = state;
+    }
 
 
     public void HandleGroundHit()
