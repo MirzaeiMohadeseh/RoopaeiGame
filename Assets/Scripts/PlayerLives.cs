@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System.Collections;
 
 public class PlayerLives : MonoBehaviour
@@ -11,13 +12,12 @@ public class PlayerLives : MonoBehaviour
     public float respawnDelay = 2f;
 
     [Header("UI References")]
-    public Image[] lifeIcons; // آرایه‌ای از تصاویر قلب‌ها در UI
-    public GameObject gameOverPanel;
+    public Image heartIcon; // آیکون قلب
+    public TMP_Text livesText; // متن نمایش تعداد جان‌ها
 
     private int currentLives;
     private bool isRespawning;
 
-    // 🔓 دسترسی فقط خواندنی به تعداد جان‌ها از بیرون
     public int CurrentLives => currentLives;
 
     void Awake()
@@ -36,6 +36,7 @@ public class PlayerLives : MonoBehaviour
     {
         ResetGame();
     }
+
     public void AddExtraLife()
     {
         if (currentLives < maxLives)
@@ -44,7 +45,6 @@ public class PlayerLives : MonoBehaviour
             UpdateLifeUI();
         }
     }
-
 
     public void LoseLife()
     {
@@ -62,13 +62,13 @@ public class PlayerLives : MonoBehaviour
         if (currentLives <= 0)
         {
             GameOver();
+            ScoreCounter.Instance.ResetGame();
         }
         else
         {
             StartCoroutine(RespawnBall());
         }
     }
-
 
     IEnumerator RespawnBall()
     {
@@ -86,24 +86,25 @@ public class PlayerLives : MonoBehaviour
 
     void UpdateLifeUI()
     {
-        for (int i = 0; i < lifeIcons.Length; i++)
-        {
-            lifeIcons[i].enabled = i < currentLives;
-        }
+        // نمایش آیکون قلب و تعداد جان‌ها
+        if (heartIcon != null)
+            heartIcon.enabled = currentLives > 0;
+        
+        if (livesText != null)
+            livesText.text = currentLives.ToString();
     }
 
     void GameOver()
     {
         Time.timeScale = 0f;
-        gameOverPanel.SetActive(true);
         Debug.Log("Game Over!");
+        
     }
 
     public void ResetGame()
     {
         currentLives = maxLives;
         UpdateLifeUI();
-        gameOverPanel.SetActive(false);
         Time.timeScale = 1f;
 
         BallController ball = FindObjectOfType<BallController>();
@@ -111,5 +112,11 @@ public class PlayerLives : MonoBehaviour
         {
             ball.ResetBall();
         }
+    }
+
+    public void FillAllLives()
+    {
+        currentLives = maxLives;
+        UpdateLifeUI();
     }
 }

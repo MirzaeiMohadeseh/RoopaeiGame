@@ -12,12 +12,6 @@ public class ScoreCounter : MonoBehaviour
     public Transform startPosition;
     private bool doubleScore = false;
 
-
-    [Header("Lives")]
-    public int maxLives = 3;
-    private int currentLives;
-    public GameObject[] lifeIcons; // آیکون‌های قلب در UI
-
     private int _score = 0;
     public bool _isGameActive = false;
 
@@ -32,6 +26,7 @@ public class ScoreCounter : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     void Start()
     {
         _highScore = PlayerPrefs.GetInt("HighScore", 0);
@@ -42,12 +37,10 @@ public class ScoreCounter : MonoBehaviour
     {
         _isGameActive = true;
         _score = 0;
-        currentLives = maxLives;
         UpdateScore();
-        UpdateLivesUI();
+        PlayerLives.Instance.ResetGame();
         ball.ResetBall();
     }
-
 
     public void RegisterTouch()
     {
@@ -71,50 +64,27 @@ public class ScoreCounter : MonoBehaviour
         doubleScore = state;
     }
 
-
     public void HandleGroundHit()
     {
         if (!_isGameActive) return;
-
-        currentLives--;
-
-        UpdateLivesUI();
-
-        if (currentLives <= 0)
-        {
-            _isGameActive = false;
-            ResetGame();
-        }
-        else
-        {
-            ball.ResetBall(); // ادامه بازی با جان کمتر
-        }
+        ball.ResetBall();
+        // استفاده از سیستم PlayerLives برای کاهش جان
+        PlayerLives.Instance.LoseLife();
     }
-
 
     public void ResetGame()
     {
         _score = 0;
         _isGameActive = false;
-        currentLives = maxLives;
         ball.ResetBall();
+        PlayerLives.Instance.ResetGame();
         scoreText.text = "...ﺪﯿﻧﺰﺑ ﻪﺑﺮﺿ ﻉﻭﺮﺷ ﯼﺍﺮﺑ";
-        UpdateLivesUI();
         EnvironmentManager.Instance.ResetEnvironment();
+        
     }
-    void UpdateLivesUI()
-    {
-        for (int i = 0; i < lifeIcons.Length; i++)
-        {
-            lifeIcons[i].SetActive(i < currentLives);
-        }
-    }
-
-
 
     void UpdateScore()
     {
         scoreText.text = $" {_score} :ﺯﺎﯿﺘﻣﺍ\n {_highScore} :ﺩﺭﻮﮐﺭ";
     }
-
 }

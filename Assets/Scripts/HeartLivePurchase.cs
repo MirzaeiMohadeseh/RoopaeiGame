@@ -45,23 +45,37 @@ public class HeartLivePurchase : MonoBehaviour
     }
 
     private void UpdatePurchaseButtonState()
+{
+    if (PlayerLives.Instance == null)
     {
-        PlayerLives playerLives = PlayerLives.Instance;
-        if (playerLives != null)
-        {
-            // همیشه دکمه را فعال نگه دارید (حتی وقتی جان‌ها پر هستند)
-            purchaseButton.interactable = true;
-
-            // نمایش یا پنهان کردن پیام "کامل است" (اختیاری)
-            if (purchaseFullMessage != null)
-            {
-                purchaseFullMessage.SetActive(playerLives.CurrentLives >= playerLives.maxLives);
-            }
-        }
+        Debug.LogWarning("PlayerLives instance not found!");
+        return;
     }
+
+    bool livesAreFull = PlayerLives.Instance.CurrentLives >= PlayerLives.Instance.maxLives;
+
+    // فعال/غیرفعال کردن دکمه خرید
+    if (purchaseButton != null)
+    {
+        purchaseButton.interactable = !livesAreFull;
+    }
+
+    // نمایش/عدم نمایش پیام "جان‌ها کامل هستند"
+    if (purchaseFullMessage != null)
+    {
+        purchaseFullMessage.SetActive(livesAreFull);
+    }
+}
 
     private async void OnPurchaseClicked()
     {
+        // اگر دکمه غیرفعال بود، هیچ کاری انجام نشود
+        if (purchaseButton != null && !purchaseButton.interactable)
+        {
+            Debug.Log("Cannot purchase: lives are already full.");
+            return;
+        }
+
         // غیرفعال کردن دکمه هنگام پردازش خرید
         if (purchaseButton != null)
         {
@@ -105,20 +119,18 @@ public class HeartLivePurchase : MonoBehaviour
     }
 
     private void IncreasePlayerLives()
+{
+    PlayerLives playerLives = PlayerLives.Instance;
+    if (playerLives != null)
     {
-        // پیدا کردن PlayerLives در صحنه
-        PlayerLives playerLives = PlayerLives.Instance;
-        if (playerLives != null)
-        {
-            // اضافه کردن یک جان (حتی اگر پر باشد)
-            playerLives.AddExtraLife();
-            Debug.Log("Life added. Current lives: " + playerLives.CurrentLives);
-        }
-        else
-        {
-            Debug.LogError("PlayerLives instance not found!");
-        }
+        playerLives.FillAllLives(); // به جای ResetGame از FillAllLives استفاده می‌کنیم
+        Debug.Log("Lives refilled. Current lives: " + playerLives.CurrentLives);
     }
+    else
+    {
+        Debug.LogError("PlayerLives instance not found!");
+    }
+}
 
     private void OnDestroy()
     {
@@ -128,4 +140,17 @@ public class HeartLivePurchase : MonoBehaviour
             purchaseButton.onClick.RemoveListener(OnPurchaseClicked);
         }
     }
+
+    public void RefreshPurchaseUI()
+    {
+        UpdatePurchaseButtonState();
+    }
+
+    private void OnEnable()
+{
+    if (PlayerLives.Instance != null)
+    {
+        UpdatePurchaseButtonState();
+    }
+}
 }
