@@ -123,8 +123,8 @@ public class HeartLivePurchase : MonoBehaviour
     PlayerLives playerLives = PlayerLives.Instance;
     if (playerLives != null)
     {
-        playerLives.FillAllLives(); // به جای ResetGame از FillAllLives استفاده می‌کنیم
-        Debug.Log("Lives refilled. Current lives: " + playerLives.CurrentLives);
+        playerLives.AddExtraLife(); // فقط یک جان اضافه شود
+        Debug.Log("Life added. Current lives: " + playerLives.CurrentLives);
     }
     else
     {
