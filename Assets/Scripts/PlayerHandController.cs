@@ -3,8 +3,11 @@ using UnityEngine.EventSystems;
 
 public class PlayerHandController : MonoBehaviour
 {
+
     void Update()
     {
+        if (HamburgerMenu.isMenuOpen)
+        return;
         if (!ScoreCounter.Instance._isGameActive) 
             return;
 

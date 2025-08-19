@@ -52,7 +52,10 @@ public class PlayerLives : MonoBehaviour
 
         if (GameStatus.Instance != null && GameStatus.Instance.IsInfiniteModeActive())
         {
-            StartCoroutine(RespawnBall());
+            // ریست سریع توپ بدون تاخیر
+            BallController ball = FindObjectOfType<BallController>();
+            if (ball != null)
+                ball.ResetBall();
             return;
         }
 
@@ -66,7 +69,10 @@ public class PlayerLives : MonoBehaviour
         }
         else
         {
-            StartCoroutine(RespawnBall());
+            // ریست سریع توپ بدون تاخیر
+            BallController ball = FindObjectOfType<BallController>();
+            if (ball != null)
+                ball.ResetBall();
         }
     }
 

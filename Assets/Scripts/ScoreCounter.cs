@@ -67,7 +67,6 @@ public class ScoreCounter : MonoBehaviour
     public void HandleGroundHit()
     {
         if (!_isGameActive) return;
-        ball.ResetBall();
         // استفاده از سیستم PlayerLives برای کاهش جان
         PlayerLives.Instance.LoseLife();
     }

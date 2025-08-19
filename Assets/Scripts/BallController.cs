@@ -24,18 +24,32 @@ public class BallController : MonoBehaviour
     }
 
     void Update()
+{
+    // بررسی اینکه بازی هنوز شروع نشده و کاربر کلیک یا تاچ کرده
+    bool userTapped = Input.GetMouseButtonDown(0) || 
+                      (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
+
+    if (!ScoreCounter.Instance._isGameActive && userTapped)
     {
-        if (!ScoreCounter.Instance._isGameActive &&
-           (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
+        // جلوگیری از تعامل با UI
+        if (IsPointerOverUIElement())
+            return;
+
+        // بررسی اینکه منو یا فروشگاه باز نیستند
+        HamburgerMenu menu = FindObjectOfType<HamburgerMenu>();
+        if (menu != null)
         {
-            if (!IsPointerOverUIElement())
-            {
-                ScoreCounter.Instance.StartGame();
-                _rb.gravityScale = 1f;
-                PlaySound(kickSound);
-            }
+            if (menu.menuPanel.activeSelf || menu.ShopCanvas.activeSelf)
+                return;
         }
+
+        // شروع بازی
+        ScoreCounter.Instance.StartGame();
+        _rb.gravityScale = 1f;
+        PlaySound(kickSound);
     }
+}
+
     private bool IsPointerOverUIElement()
     {
         return EventSystem.current.currentSelectedGameObject != null;
